@@ -8,15 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="068c58ae-b19c-436f-8054-4acac8d96151" name="Changes" comment="Basic Project Structure and Controller definition">
-      <change afterPath="$PROJECT_DIR$/BoarDo.Server/Controllers/ToDoController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BoarDo.Server/Models/ToDo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BoarDo.Server/Models/ToDoSet.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BoarDo.Server/Services/IToDoService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BoarDo.Server/Services/ToDoService.cs" afterDir="false" />
+    <list default="true" id="068c58ae-b19c-436f-8054-4acac8d96151" name="Changes" comment="Added basic Api and ToDoService to manage ToDos">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BoarDo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BoarDo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoarDo.Server/BoarDo.Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/BoarDo.Server.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoarDo.Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +21,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ddc4ad1aec4632d9c87e3c9a0be83f97091187a6832a53fe96a3f15acf770/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b9ec86353372ef6d4b862ec3552934310c2b674b5b263f7ee508468e028ab84/EventArgs.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -93,8 +87,16 @@
       <updated>1654628550825</updated>
       <workItem from="1654628556237" duration="2258000" />
       <workItem from="1654713432631" duration="2085000" />
-      <workItem from="1654798453061" duration="2013000" />
+      <workItem from="1654798453061" duration="3908000" />
     </task>
+    <task id="LOCAL-00001" summary="Added basic Api and ToDoService to manage ToDos">
+      <created>1654800703268</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1654800703268</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +118,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Basic Project Structure and Controller definition" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Project Structure and Controller definition" />
+    <MESSAGE value="Added basic Api and ToDoService to manage ToDos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added basic Api and ToDoService to manage ToDos" />
   </component>
 </project>
