@@ -8,13 +8,14 @@ public class ToDoService : IToDoService
 	public ToDoSet? ToDoSet { get; private set; }
 
 	public event EventHandler<ToDoChangedEventArgs>? ToDoChanged;
-	public event EventHandler? ToDoSetChanged;
+	public event EventHandler<ToDoSetChangedEventArgs>? ToDoSetChanged;
 
 
 	public bool SyncToDoSet(ToDoSet set)
 	{
 		ToDoSet = set;
-		OnToDoSetChanged();
+		var args = new ToDoSetChangedEventArgs { Set = set };
+		OnToDoSetChanged(args);
 		return true;
 	}
 
@@ -42,10 +43,10 @@ public class ToDoService : IToDoService
 
 	}
 
-	protected virtual void OnToDoSetChanged()
+	protected virtual void OnToDoSetChanged(ToDoSetChangedEventArgs e)
 	{
 		var handler = ToDoSetChanged;
-		handler?.Invoke(this, EventArgs.Empty);
+		handler?.Invoke(this, e);
 	}
 
 	protected virtual void OnToDoChanged(ToDoChangedEventArgs e)

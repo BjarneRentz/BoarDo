@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IToDoService, ToDoService>();
+builder.Services.AddSingleton<IRenderService, RenderService>();
 
 var app = builder.Build();
 
