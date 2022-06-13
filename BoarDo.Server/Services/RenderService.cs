@@ -63,13 +63,24 @@ public class RenderService : IRenderService, IDisposable
 			.FontFamily("Quicksand")
 			.Add(name, fontSize: 48.0f, fontWeight: 700 );
 		rs.Paint(_canvas, new SKPoint((480 - rs.MeasuredWidth) / 2.0f, 0));
+
+		var args = new ScreenChangedEventArgs
+		{
+			X = 20,
+			Y = 0,
+			Width = 440,
+			Height = 56
+		};
+		
+		OnScreenChanged(args);
 	}
 
 	private void RenderToDos(List<ToDo> todos)
 	{
 		
-		for (int i = 0; i < todos.Count; i++)
+		for (var i = 0; i < todos.Count; i++)
 			RenderToDo(todos[i], i);
+		
 	}
 
 	private void RenderToDo(ToDo todo, int position)
@@ -81,6 +92,16 @@ public class RenderService : IRenderService, IDisposable
 		rs.Paint(_canvas, new SKPoint(20,y));
 		if(todo.Completed)
 			_canvas.DrawLine(20, y +2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,y +2 + rs.MeasuredHeight / 2.0f, new SKPaint{Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4, StrokeCap = SKStrokeCap.Round});
+
+		var args = new ScreenChangedEventArgs
+		{
+			X = 0,
+			Y = y,
+			Width = 480,
+			Height = 50
+		};
+		
+		OnScreenChanged(args);
 		
 	}
 	
@@ -140,6 +161,12 @@ public class RenderService : IRenderService, IDisposable
 			if (ip.AddressFamily == AddressFamily.InterNetwork)
 				return ip.ToString();
 		throw new Exception("No network adapters with an IPv4 address in the system!");
+	}
+
+	private void OnScreenChanged(ScreenChangedEventArgs e)
+	{
+		var handler = ScreenChanged;
+		handler?.Invoke(this, e);
 	}
 
 	public void Dispose()
