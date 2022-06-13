@@ -14,9 +14,13 @@ public class RenderService : IRenderService, IDisposable
 
 	private readonly IToDoService _toDoService;
 
+	private const int ScreenWidth = 480;
+	private const int ScreenHeight = 800;
+	
+
 	public RenderService(IToDoService toDoService)
 	{
-		_screen = new SKBitmap(480, 800);
+		_screen = new SKBitmap(ScreenWidth, ScreenHeight);
 		_canvas = new SKCanvas(_screen);
 		RenderInitialScreen();
 		toDoService.ToDoSetChanged += OnToDoSetChanged;
@@ -67,7 +71,7 @@ public class RenderService : IRenderService, IDisposable
 			.Alignment(TextAlignment.Center)
 			.FontFamily("Quicksand")
 			.Add(name, fontSize: 48.0f, fontWeight: 700);
-		rs.Paint(_canvas, new SKPoint((480 - rs.MeasuredWidth) / 2.0f, 0));
+		rs.Paint(_canvas, new SKPoint((ScreenHeight - rs.MeasuredWidth) / 2.0f, 0));
 
 		var args = new ScreenChangedEventArgs
 		{
@@ -89,7 +93,7 @@ public class RenderService : IRenderService, IDisposable
 	private void RenderToDo(ToDo todo, int position)
 	{
 		var y = 60 + 50 * position;
-		_canvas.DrawRect(0, y, 480, 50, new SKPaint { Color = SKColors.White });
+		_canvas.DrawRect(0, y, ScreenWidth, 50, new SKPaint { Color = SKColors.White });
 		var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
 			.Add(todo.Title, fontSize: 32.0f);
 		rs.Paint(_canvas, new SKPoint(20, y));
@@ -106,7 +110,7 @@ public class RenderService : IRenderService, IDisposable
 		{
 			X = 0,
 			Y = y,
-			Width = 480,
+			Width = ScreenWidth,
 			Height = 50
 		};
 
@@ -116,9 +120,9 @@ public class RenderService : IRenderService, IDisposable
 
 	private MemoryStream GetScreen()
 	{
-		using SKBitmap landscapeBitmap = new(800, 480, _screen.ColorType, _screen.AlphaType, _screen.ColorSpace);
+		using SKBitmap landscapeBitmap = new(ScreenHeight, ScreenWidth, _screen.ColorType, _screen.AlphaType, _screen.ColorSpace);
 		using var landscapeCanvas = new SKCanvas(landscapeBitmap);
-		landscapeCanvas.Translate(0, 480);
+		landscapeCanvas.Translate(0, ScreenWidth);
 		landscapeCanvas.RotateDegrees(270);
 		landscapeCanvas.DrawBitmap(_screen, 0, 0);
 
@@ -138,7 +142,7 @@ public class RenderService : IRenderService, IDisposable
 	}
 
 	/// <summary>
-	///     Renders the initial screen that displays the Ip-Adress.
+	///     Renders the initial screen that displays the Ip-Address.
 	/// </summary>
 	private void RenderInitialScreen()
 	{
@@ -157,7 +161,7 @@ public class RenderService : IRenderService, IDisposable
 			.Paragraph()
 			.Add(GetLocalIPAddress(), fontSize: 48.0f, underline: UnderlineStyle.Solid);
 
-		rs.Paint(canvas, new SKPoint((480 - rs.MeasuredWidth) / 2.0f, 100));
+		rs.Paint(canvas, new SKPoint((ScreenWidth - rs.MeasuredWidth) / 2.0f, 100));
 	}
 
 	private string GetLocalIPAddress()
@@ -169,7 +173,7 @@ public class RenderService : IRenderService, IDisposable
 		throw new Exception("No network adapters with an IPv4 address in the system!");
 	}
 
-	private void OnScreenChanged(ScreenChangedEventArgs e)
+	protected virtual void OnScreenChanged(ScreenChangedEventArgs e)
 	{
 		var handler = ScreenChanged;
 		handler?.Invoke(this, e);
