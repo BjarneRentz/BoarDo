@@ -9,12 +9,11 @@ namespace BoarDo.Server.Services;
 
 public class RenderService : IRenderService, IDisposable
 {
+	private readonly SKCanvas _canvas;
 	private readonly SKBitmap _screen;
 
-	private readonly SKCanvas _canvas;
-
 	private readonly IToDoService _toDoService;
-	
+
 	public RenderService(IToDoService toDoService)
 	{
 		_screen = new SKBitmap(480, 800);
@@ -23,6 +22,12 @@ public class RenderService : IRenderService, IDisposable
 		toDoService.ToDoSetChanged += OnToDoSetChanged;
 		toDoService.ToDoChanged += OnToDoChanged;
 		_toDoService = toDoService;
+	}
+
+	public void Dispose()
+	{
+		_screen.Dispose();
+		_canvas.Dispose();
 	}
 
 	public event EventHandler<ScreenChangedEventArgs>? ScreenChanged;
@@ -43,7 +48,7 @@ public class RenderService : IRenderService, IDisposable
 			// Render new Entry at the end of the list.
 			if (_toDoService.ToDoSet == null)
 				return;
-			RenderToDo(args.ToDo, _toDoService.ToDoSet.ToDos.Count -1);
+			RenderToDo(args.ToDo, _toDoService.ToDoSet.ToDos.Count - 1);
 		}
 		else
 		{
@@ -57,11 +62,11 @@ public class RenderService : IRenderService, IDisposable
 
 	private void RenderHeader(string name)
 	{
-		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint{Color = SKColors.Black});
+		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint { Color = SKColors.Black });
 		var rs = new RichString()
 			.Alignment(TextAlignment.Center)
 			.FontFamily("Quicksand")
-			.Add(name, fontSize: 48.0f, fontWeight: 700 );
+			.Add(name, fontSize: 48.0f, fontWeight: 700);
 		rs.Paint(_canvas, new SKPoint((480 - rs.MeasuredWidth) / 2.0f, 0));
 
 		var args = new ScreenChangedEventArgs
@@ -71,27 +76,31 @@ public class RenderService : IRenderService, IDisposable
 			Width = 440,
 			Height = 56
 		};
-		
+
 		OnScreenChanged(args);
 	}
 
 	private void RenderToDos(List<ToDo> todos)
 	{
-		
 		for (var i = 0; i < todos.Count; i++)
 			RenderToDo(todos[i], i);
-		
 	}
 
 	private void RenderToDo(ToDo todo, int position)
 	{
 		var y = 60 + 50 * position;
-		_canvas.DrawRect(0,y,480, 50, new SKPaint{Color = SKColors.White});
+		_canvas.DrawRect(0, y, 480, 50, new SKPaint { Color = SKColors.White });
 		var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
-			.Add(todo.Title, fontSize:32.0f);
-		rs.Paint(_canvas, new SKPoint(20,y));
-		if(todo.Completed)
-			_canvas.DrawLine(20, y +2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,y +2 + rs.MeasuredHeight / 2.0f, new SKPaint{Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4, StrokeCap = SKStrokeCap.Round});
+			.Add(todo.Title, fontSize: 32.0f);
+		rs.Paint(_canvas, new SKPoint(20, y));
+		if (todo.Completed)
+			_canvas.DrawLine(20, y + 2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,
+				y + 2 + rs.MeasuredHeight / 2.0f,
+				new SKPaint
+				{
+					Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4,
+					StrokeCap = SKStrokeCap.Round
+				});
 
 		var args = new ScreenChangedEventArgs
 		{
@@ -100,14 +109,11 @@ public class RenderService : IRenderService, IDisposable
 			Width = 480,
 			Height = 50
 		};
-		
-		OnScreenChanged(args);
-		
-	}
-	
 
-	
-	
+		OnScreenChanged(args);
+	}
+
+
 	private MemoryStream GetScreen()
 	{
 		using SKBitmap landscapeBitmap = new(800, 480, _screen.ColorType, _screen.AlphaType, _screen.ColorSpace);
@@ -167,11 +173,5 @@ public class RenderService : IRenderService, IDisposable
 	{
 		var handler = ScreenChanged;
 		handler?.Invoke(this, e);
-	}
-
-	public void Dispose()
-	{
-		_screen.Dispose();
-		_canvas.Dispose();
 	}
 }

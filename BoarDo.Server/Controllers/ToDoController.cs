@@ -8,16 +8,15 @@ namespace BoarDo.Server.Controllers;
 [Route("[controller]")]
 public class ToDoController : Controller
 {
-
 	private readonly IToDoService _toDoService;
 
 	public ToDoController(IToDoService toDoService)
 	{
 		_toDoService = toDoService ?? throw new ArgumentNullException(nameof(toDoService));
 	}
-	
+
 	/// <summary>
-	///		Returns the current ToDoSet.
+	///     Returns the current ToDoSet.
 	/// </summary>
 	/// <returns></returns>
 	[HttpGet("Set")]
@@ -25,9 +24,9 @@ public class ToDoController : Controller
 	{
 		return Ok(_toDoService.ToDoSet);
 	}
-	
+
 	/// <summary>
-	///		Sets the new active ToDoSet
+	///     Sets the new active ToDoSet
 	/// </summary>
 	/// <param name="set"></param>
 	/// <returns></returns>
@@ -40,7 +39,7 @@ public class ToDoController : Controller
 	}
 
 	/// <summary>
-	///		Updates the given ToDo.
+	///     Updates the given ToDo.
 	/// </summary>
 	/// <param name="todo"></param>
 	/// <returns></returns>

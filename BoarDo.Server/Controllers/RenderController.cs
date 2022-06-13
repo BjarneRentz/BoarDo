@@ -13,7 +13,7 @@ public class RenderController : Controller
 	{
 		_renderService = renderService ?? throw new ArgumentNullException(nameof(renderService));
 	}
-	
+
 	[HttpGet("Screen")]
 	public ActionResult GetCurrentScreen()
 	{

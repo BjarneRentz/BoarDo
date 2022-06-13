@@ -27,7 +27,7 @@ public class ToDoService : IToDoService
 		var trackedToDo = ToDoSet.ToDos.Find(t => t.Id == todo.Id);
 
 		ToDoChangedEventArgs args;
-		
+
 		if (trackedToDo != null)
 		{
 			trackedToDo.Title = todo.Title;
@@ -39,11 +39,10 @@ public class ToDoService : IToDoService
 			ToDoSet.ToDos.Add(todo);
 			args = new ToDoChangedEventArgs { ToDo = todo, IsNew = true };
 		}
-		
+
 		OnToDoChanged(args);
 
 		return true;
-
 	}
 
 	protected virtual void OnToDoSetChanged(ToDoSetChangedEventArgs e)

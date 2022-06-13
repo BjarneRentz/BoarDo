@@ -9,7 +9,7 @@ public interface IToDoService
 
 	public event EventHandler<ToDoChangedEventArgs> ToDoChanged;
 
-	public event EventHandler<ToDoSetChangedEventArgs> ToDoSetChanged; 
+	public event EventHandler<ToDoSetChangedEventArgs> ToDoSetChanged;
 
 	public bool SyncToDoSet(ToDoSet set);
 
