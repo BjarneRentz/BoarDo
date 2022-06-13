@@ -25,18 +25,21 @@ public class ToDoService : IToDoService
 			return false;
 
 		var trackedToDo = ToDoSet.ToDos.Find(t => t.Id == todo.Id);
+
+		ToDoChangedEventArgs args;
 		
 		if (trackedToDo != null)
 		{
 			trackedToDo.Title = todo.Title;
 			trackedToDo.Completed = todo.Completed;
+			args = new ToDoChangedEventArgs { ToDo = trackedToDo, IsNew = false };
 		}
 		else
 		{
 			ToDoSet.ToDos.Add(todo);
+			args = new ToDoChangedEventArgs { ToDo = todo, IsNew = true };
 		}
 		
-		var args = new ToDoChangedEventArgs { ToDo = todo };
 		OnToDoChanged(args);
 
 		return true;

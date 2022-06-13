@@ -12,6 +12,8 @@ public class RenderService : IRenderService, IDisposable
 	private readonly SKBitmap _screen;
 
 	private readonly SKCanvas _canvas;
+
+	private readonly IToDoService _toDoService;
 	
 	public RenderService(IToDoService toDoService)
 	{
@@ -19,6 +21,8 @@ public class RenderService : IRenderService, IDisposable
 		_canvas = new SKCanvas(_screen);
 		RenderInitialScreen();
 		toDoService.ToDoSetChanged += OnToDoSetChanged;
+		toDoService.ToDoChanged += OnToDoChanged;
+		_toDoService = toDoService;
 	}
 
 	public event EventHandler<ScreenChangedEventArgs>? ScreenChanged;
@@ -32,30 +36,54 @@ public class RenderService : IRenderService, IDisposable
 		RenderToDos(args.Set.ToDos);
 	}
 
+	private void OnToDoChanged(object? sender, ToDoChangedEventArgs args)
+	{
+		if (args.IsNew)
+		{
+			// Render new Entry at the end of the list.
+			if (_toDoService.ToDoSet == null)
+				return;
+			RenderToDo(args.ToDo, _toDoService.ToDoSet.ToDos.Count -1);
+		}
+		else
+		{
+			// Rerender updated version
+			if (_toDoService.ToDoSet == null)
+				return;
+			var pos = _toDoService.ToDoSet.ToDos.IndexOf(args.ToDo);
+			RenderToDo(args.ToDo, pos);
+		}
+	}
+
 	private void RenderHeader(string name)
 	{
-		_canvas.DrawLine(20.0f, 50.0f, 460.0f, 50.0f, new SKPaint{Color = SKColors.Black});
+		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint{Color = SKColors.Black});
 		var rs = new RichString()
 			.Alignment(TextAlignment.Center)
 			.FontFamily("Quicksand")
-			.Add(name, fontSize: 48.0f, fontWeight: 100);
+			.Add(name, fontSize: 48.0f, fontWeight: 700 );
 		rs.Paint(_canvas, new SKPoint((480 - rs.MeasuredWidth) / 2.0f, 0));
 	}
 
 	private void RenderToDos(List<ToDo> todos)
 	{
-		var y = 60.0f;
-
-		foreach (var t in todos)
-		{
-			var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
-				.Add(t.Title, fontSize:32.0f);
-			rs.Paint(_canvas, new SKPoint(20, y));
-			if(t.Completed)
-				_canvas.DrawLine(20, y +2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,y +2 + rs.MeasuredHeight / 2.0f, new SKPaint{Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4, StrokeCap = SKStrokeCap.Round});
-			y += rs.MeasuredHeight + 10;
-		}
+		
+		for (int i = 0; i < todos.Count; i++)
+			RenderToDo(todos[i], i);
 	}
+
+	private void RenderToDo(ToDo todo, int position)
+	{
+		var y = 60 + 50 * position;
+		_canvas.DrawRect(0,y,480, 50, new SKPaint{Color = SKColors.White});
+		var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
+			.Add(todo.Title, fontSize:32.0f);
+		rs.Paint(_canvas, new SKPoint(20,y));
+		if(todo.Completed)
+			_canvas.DrawLine(20, y +2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,y +2 + rs.MeasuredHeight / 2.0f, new SKPaint{Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4, StrokeCap = SKStrokeCap.Round});
+		
+	}
+	
 
 	
 	
