@@ -8,13 +8,14 @@ public class ToDoService : IToDoService
 	public ToDoSet? ToDoSet { get; private set; }
 
 	public event EventHandler<ToDoChangedEventArgs>? ToDoChanged;
-	public event EventHandler? ToDoSetChanged;
+	public event EventHandler<ToDoSetChangedEventArgs>? ToDoSetChanged;
 
 
 	public bool SyncToDoSet(ToDoSet set)
 	{
 		ToDoSet = set;
-		OnToDoSetChanged();
+		var args = new ToDoSetChangedEventArgs { Set = set };
+		OnToDoSetChanged(args);
 		return true;
 	}
 
@@ -24,28 +25,30 @@ public class ToDoService : IToDoService
 			return false;
 
 		var trackedToDo = ToDoSet.ToDos.Find(t => t.Id == todo.Id);
-		
+
+		ToDoChangedEventArgs args;
+
 		if (trackedToDo != null)
 		{
 			trackedToDo.Title = todo.Title;
 			trackedToDo.Completed = todo.Completed;
+			args = new ToDoChangedEventArgs { ToDo = trackedToDo, IsNew = false };
 		}
 		else
 		{
 			ToDoSet.ToDos.Add(todo);
+			args = new ToDoChangedEventArgs { ToDo = todo, IsNew = true };
 		}
-		
-		var args = new ToDoChangedEventArgs { ToDo = todo };
+
 		OnToDoChanged(args);
 
 		return true;
-
 	}
 
-	protected virtual void OnToDoSetChanged()
+	protected virtual void OnToDoSetChanged(ToDoSetChangedEventArgs e)
 	{
 		var handler = ToDoSetChanged;
-		handler?.Invoke(this, EventArgs.Empty);
+		handler?.Invoke(this, e);
 	}
 
 	protected virtual void OnToDoChanged(ToDoChangedEventArgs e)
