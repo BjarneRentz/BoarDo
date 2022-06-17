@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IToDoService, ToDoService>();
 builder.Services.AddSingleton<IRenderService, RenderService>();
 
+builder.Services.AddHostedService<EInkDisplay>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -11,9 +11,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="068c58ae-b19c-436f-8054-4acac8d96151" name="Changes" comment="Rider Code Cleanup">
-      <change beforePath="$PROJECT_DIR$/BoarDo.Server/Events/ScreenChangedEventArgs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/Events/ScreenChangedEventArgs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoarDo.Server/Services/RenderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/Services/RenderService.cs" afterDir="false" />
+    <list default="true" id="068c58ae-b19c-436f-8054-4acac8d96151" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BoarDo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BoarDo/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BoarDo.Server/BoarDo.Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/BoarDo.Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BoarDo.Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BoarDo.Server/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,22 +31,16 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5956701c92ec47bc98145555cd08eafca23890/c4/b661cf5e/IDisposable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6fe11651d1e944a2862e32f6f427753f4a00/5e/6da760bb/EPaperDisplay.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6fe11651d1e944a2862e32f6f427753f4a00/70/5ce89ec9/IEPaperDisplay.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a79cc574e84446428536b6f1ab129b7e68fa0/59/7c640055/SKNativeObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ddc4ad1aec4632d9c87e3c9a0be83f97091187a6832a53fe96a3f15acf770/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/481ec4a6d893f46772239acd52329e62fa1f073a48d4e45d4ca1abbbf94c/RichString.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/575c31ecc35a636b6f962cb71d53992552941a18982aae1c8e6c16305cc3761b/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a6959b90c943ca2f853243fd496e77375c23974fd861c6e8e8aa1db08aae834a/StrikeThroughStyle.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b3d417c62eda366e504b62313fcbb9dcb352cc42b8340efb34a661516b84/StyleManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b9ec86353372ef6d4b862ec3552934310c2b674b5b263f7ee508468e028ab84/EventArgs.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Controllers/RenderController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Controllers/ToDoController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Events/ScreenChangedEventArgs.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Events/ScreenChangedEventArgs.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Models/ToDo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Models/ToDoSet.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Services/IRenderService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Services/IToDoService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Services/RenderService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Bjarne/Projekte/BoarDo/BoarDo.Server/Services/ToDoService.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -59,21 +54,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "XThreadsFramesViewSplitterKey": "0.23232323",
-    "dart.analysis.tool.window.visible": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.updates",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.23232323&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.updates&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.BoarDo.Server">
     <configuration name="BoarDo.Server" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/BoarDo.Server/BoarDo.Server.csproj" />
@@ -120,7 +115,9 @@
       <workItem from="1654939406021" duration="5413000" />
       <workItem from="1654950510354" duration="5241000" />
       <workItem from="1655052281892" duration="5027000" />
-      <workItem from="1655145008287" duration="1708000" />
+      <workItem from="1655145008287" duration="2318000" />
+      <workItem from="1655312542987" duration="2243000" />
+      <workItem from="1655317025932" duration="648000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic Api and ToDoService to manage ToDos">
       <created>1654800703268</created>
@@ -143,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655146041381</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Minor improvements in RenderService">
+      <created>1655146781376</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1655146781376</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,6 +172,7 @@
     <MESSAGE value="Added basic Api and ToDoService to manage ToDos" />
     <MESSAGE value="Implemented OnScreenChanged" />
     <MESSAGE value="Rider Code Cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rider Code Cleanup" />
+    <MESSAGE value="Minor improvements in RenderService" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor improvements in RenderService" />
   </component>
 </project>
