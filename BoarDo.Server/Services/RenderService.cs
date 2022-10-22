@@ -3,7 +3,6 @@ using System.Net.Sockets;
 using BoarDo.Server.Events;
 using BoarDo.Server.Models;
 using SkiaSharp;
-using Topten.RichTextKit;
 
 namespace BoarDo.Server.Services;
 
@@ -67,11 +66,7 @@ public class RenderService : IRenderService, IDisposable
 	private void RenderHeader(string name)
 	{
 		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint { Color = SKColors.Black });
-		var rs = new RichString()
-			.Alignment(TextAlignment.Center)
-			.FontFamily("Quicksand")
-			.Add(name, fontSize: 48.0f, fontWeight: 700);
-		rs.Paint(_canvas, new SKPoint((ScreenHeight - rs.MeasuredWidth) / 2.0f, 0));
+		RenderText(name, ScreenWidth / 2.0f, 50, 48.0f);
 
 		var args = new ScreenChangedEventArgs
 		{
@@ -92,20 +87,11 @@ public class RenderService : IRenderService, IDisposable
 
 	private void RenderToDo(ToDo todo, int position)
 	{
-		var y = 60 + 50 * position;
-		_canvas.DrawRect(0, y, ScreenWidth, 50, new SKPaint { Color = SKColors.White });
-		var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
-			.Add(todo.Title, fontSize: 32.0f);
-		rs.Paint(_canvas, new SKPoint(20, y));
-		if (todo.Completed)
-			_canvas.DrawLine(20, y + 2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,
-				y + 2 + rs.MeasuredHeight / 2.0f,
-				new SKPaint
-				{
-					Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4,
-					StrokeCap = SKStrokeCap.Round
-				});
-
+		var y = 100 + 50 * position;
+		
+		RenderText(todo.Title, 20,y, 32.0f, SKTextAlign.Left, todo.Completed);
+		
+		
 		var args = new ScreenChangedEventArgs
 		{
 			X = 0,
@@ -146,22 +132,39 @@ public class RenderService : IRenderService, IDisposable
 	/// </summary>
 	private void RenderInitialScreen()
 	{
-		using var canvas = new SKCanvas(_screen);
-		canvas.Clear(SKColors.White);
+		_canvas.Clear(SKColors.White);
+		
+		RenderText("Hey there", ScreenWidth / 2.0f, 40, 48.0f);
+		RenderText("To connect, enter this IP in the App", ScreenWidth / 2.0f, 70,24.0f);
+		RenderText(GetLocalIPAddress(), ScreenWidth / 2.0f, 150,48.0f);
+		
+	}
 
-
-		var rs = new RichString()
-			.Alignment(TextAlignment.Center)
-			.FontFamily("Quicksand")
-			.MarginBottom(40)
-			.Add("Hey there", fontSize: 48.0f)
-			.Paragraph()
-			.MarginBottom(20)
-			.Add("To connect, enter this IP in the App", fontSize: 24.0f)
-			.Paragraph()
-			.Add(GetLocalIPAddress(), fontSize: 48.0f, underline: UnderlineStyle.Solid);
-
-		rs.Paint(canvas, new SKPoint((ScreenWidth - rs.MeasuredWidth) / 2.0f, 100));
+	private void RenderText(string text, float x, float y, float fontSize, SKTextAlign textAlign = SKTextAlign.Center,
+		bool striked = false)
+	{
+		using var paint = new SKPaint
+		{
+			Color = SKColors.Black,
+			IsAntialias = true,
+			TextSize = fontSize,
+			TextAlign = textAlign,
+		};
+		
+		_canvas.DrawText(text, x,y,paint);
+		if (striked)
+		{
+			var textBounds = new SKRect();
+			var textWidth = paint.MeasureText(text, ref textBounds);
+			_canvas.DrawLine(20, y - textBounds.Size.Height / 2.0f, 20 + textWidth,
+				y - textBounds.Size.Height / 2.0f,
+				new SKPaint
+				{
+					Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4,
+					StrokeCap = SKStrokeCap.Round
+				});
+		}
+		
 	}
 
 	private string GetLocalIPAddress()
