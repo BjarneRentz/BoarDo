@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using BoarDo.Server.Events;
-using BoarDo.Server.Models;
 using SkiaSharp;
 
 namespace BoarDo.Server.Services;
@@ -11,20 +10,16 @@ public class RenderService : IRenderService, IDisposable
 	private readonly SKCanvas _canvas;
 	private readonly SKBitmap _screen;
 
-	private readonly IToDoService _toDoService;
 
 	private const int ScreenWidth = 480;
 	private const int ScreenHeight = 800;
 	
 
-	public RenderService(IToDoService toDoService)
+	public RenderService()
 	{
 		_screen = new SKBitmap(ScreenWidth, ScreenHeight);
 		_canvas = new SKCanvas(_screen);
 		RenderInitialScreen();
-		toDoService.ToDoSetChanged += OnToDoSetChanged;
-		toDoService.ToDoChanged += OnToDoChanged;
-		_toDoService = toDoService;
 	}
 
 	public void Dispose()
@@ -37,34 +32,11 @@ public class RenderService : IRenderService, IDisposable
 	public Stream CurrentScreen => GetScreen();
 	public Stream CurrentDebugScreen => GetDebugScreen();
 
-	private void OnToDoSetChanged(object? sender, ToDoSetChangedEventArgs args)
+
+	public void RenderHeader(string name)
 	{
 		_canvas.Clear(SKColors.White);
-		RenderHeader(args.Set.Name);
-		RenderToDos(args.Set.ToDos);
-	}
 
-	private void OnToDoChanged(object? sender, ToDoChangedEventArgs args)
-	{
-		if (args.IsNew)
-		{
-			// Render new Entry at the end of the list.
-			if (_toDoService.ToDoSet == null)
-				return;
-			RenderToDo(args.ToDo, _toDoService.ToDoSet.ToDos.Count - 1);
-		}
-		else
-		{
-			// Rerender updated version
-			if (_toDoService.ToDoSet == null)
-				return;
-			var pos = _toDoService.ToDoSet.ToDos.IndexOf(args.ToDo);
-			RenderToDo(args.ToDo, pos);
-		}
-	}
-
-	private void RenderHeader(string name)
-	{
 		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint { Color = SKColors.Black });
 		RenderText(name, ScreenWidth / 2.0f, 50, 48.0f);
 
@@ -79,29 +51,6 @@ public class RenderService : IRenderService, IDisposable
 		OnScreenChanged(args);
 	}
 
-	private void RenderToDos(List<ToDo> todos)
-	{
-		for (var i = 0; i < todos.Count; i++)
-			RenderToDo(todos[i], i);
-	}
-
-	private void RenderToDo(ToDo todo, int position)
-	{
-		var y = 100 + 50 * position;
-		
-		RenderText(todo.Title, 20,y, 32.0f, SKTextAlign.Left, todo.Completed);
-		
-		
-		var args = new ScreenChangedEventArgs
-		{
-			X = 0,
-			Y = y,
-			Width = ScreenWidth,
-			Height = 50
-		};
-
-		OnScreenChanged(args);
-	}
 
 
 	private MemoryStream GetScreen()
@@ -136,7 +85,16 @@ public class RenderService : IRenderService, IDisposable
 		
 		RenderText("Hey there", ScreenWidth / 2.0f, 40, 48.0f);
 		RenderText("To connect, enter this IP in the App", ScreenWidth / 2.0f, 70,24.0f);
-		RenderText(GetLocalIPAddress(), ScreenWidth / 2.0f, 150,48.0f);
+		RenderText(GetLocalIpAddress(), ScreenWidth / 2.0f, 150,48.0f);
+		
+		var args = new ScreenChangedEventArgs
+		{
+			X = 0,
+			Y = 0,
+			Width = ScreenWidth,
+			Height = ScreenHeight
+		};
+		OnScreenChanged(args);
 		
 	}
 
@@ -167,7 +125,7 @@ public class RenderService : IRenderService, IDisposable
 		
 	}
 
-	private string GetLocalIPAddress()
+	private string GetLocalIpAddress()
 	{
 		var host = Dns.GetHostEntry(Dns.GetHostName());
 		foreach (var ip in host.AddressList)

@@ -14,6 +14,8 @@ public interface IRenderService
 	/// </summary>
 	public Stream CurrentDebugScreen { get; }
 
+	public void RenderHeader(string name);
+
 	/// <summary>
 	///		Gets triggered whenever the underlying screen changess 
 	/// </summary>
