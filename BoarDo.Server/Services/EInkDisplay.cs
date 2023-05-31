@@ -29,6 +29,10 @@ public class EInkDisplay : IHostedService
 		_display.WaitUntilReady();		
 		_renderService.ScreenChanged += OnScreenChanged;
 
+		_display.PowerOn();
+		_display.DisplayImage(new(_renderService.CurrentScreen));
+		_display.PowerOff();
+		
 		return Task.CompletedTask;
 	}
 

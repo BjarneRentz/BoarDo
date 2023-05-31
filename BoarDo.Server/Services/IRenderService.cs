@@ -9,11 +9,6 @@ public interface IRenderService
 	/// </summary>
 	public Stream CurrentScreen { get; }
 
-	/// <summary>
-	///     Represents the current Screen without correct rotation.
-	/// </summary>
-	public Stream CurrentDebugScreen { get; }
-
 	public void RenderHeader(string name);
 
 	/// <summary>
