@@ -20,9 +20,12 @@ public class RenderController : Controller
 		return File(_renderService.CurrentScreen, "image/jpeg");
 	}
 
-	[HttpGet("DebugScreen")]
-	public ActionResult GetCurrentdebugScreen()
+	
+	[HttpPost("RenderText/${name}")]
+	public ActionResult RenderName(string name)
 	{
-		return File(_renderService.CurrentDebugScreen, "image/jpeg");
+		_renderService.RenderHeader(name);
+
+		return Ok();
 	}
 }

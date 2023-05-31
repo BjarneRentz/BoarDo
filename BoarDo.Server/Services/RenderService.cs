@@ -1,9 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using BoarDo.Server.Events;
-using BoarDo.Server.Models;
 using SkiaSharp;
-using Topten.RichTextKit;
 
 namespace BoarDo.Server.Services;
 
@@ -12,20 +10,16 @@ public class RenderService : IRenderService, IDisposable
 	private readonly SKCanvas _canvas;
 	private readonly SKBitmap _screen;
 
-	private readonly IToDoService _toDoService;
 
-	private const int ScreenWidth = 480;
-	private const int ScreenHeight = 800;
+	private const int ScreenWidth = 800;
+	private const int ScreenHeight = 480;
 	
 
-	public RenderService(IToDoService toDoService)
+	public RenderService()
 	{
 		_screen = new SKBitmap(ScreenWidth, ScreenHeight);
 		_canvas = new SKCanvas(_screen);
 		RenderInitialScreen();
-		toDoService.ToDoSetChanged += OnToDoSetChanged;
-		toDoService.ToDoChanged += OnToDoChanged;
-		_toDoService = toDoService;
 	}
 
 	public void Dispose()
@@ -36,42 +30,14 @@ public class RenderService : IRenderService, IDisposable
 
 	public event EventHandler<ScreenChangedEventArgs>? ScreenChanged;
 	public Stream CurrentScreen => GetScreen();
-	public Stream CurrentDebugScreen => GetDebugScreen();
 
-	private void OnToDoSetChanged(object? sender, ToDoSetChangedEventArgs args)
+
+	public void RenderHeader(string name)
 	{
 		_canvas.Clear(SKColors.White);
-		RenderHeader(args.Set.Name);
-		RenderToDos(args.Set.ToDos);
-	}
 
-	private void OnToDoChanged(object? sender, ToDoChangedEventArgs args)
-	{
-		if (args.IsNew)
-		{
-			// Render new Entry at the end of the list.
-			if (_toDoService.ToDoSet == null)
-				return;
-			RenderToDo(args.ToDo, _toDoService.ToDoSet.ToDos.Count - 1);
-		}
-		else
-		{
-			// Rerender updated version
-			if (_toDoService.ToDoSet == null)
-				return;
-			var pos = _toDoService.ToDoSet.ToDos.IndexOf(args.ToDo);
-			RenderToDo(args.ToDo, pos);
-		}
-	}
-
-	private void RenderHeader(string name)
-	{
-		_canvas.DrawLine(20.0f, 56.0f, 460.0f, 56.0f, new SKPaint { Color = SKColors.Black });
-		var rs = new RichString()
-			.Alignment(TextAlignment.Center)
-			.FontFamily("Quicksand")
-			.Add(name, fontSize: 48.0f, fontWeight: 700);
-		rs.Paint(_canvas, new SKPoint((ScreenHeight - rs.MeasuredWidth) / 2.0f, 0));
+		_canvas.DrawLine(20.0f, 56.0f, ScreenWidth - 20, 56.0f, new SKPaint { Color = SKColors.Black });
+		RenderText(name, ScreenWidth / 2.0f, 50, 48.0f);
 
 		var args = new ScreenChangedEventArgs
 		{
@@ -84,56 +50,10 @@ public class RenderService : IRenderService, IDisposable
 		OnScreenChanged(args);
 	}
 
-	private void RenderToDos(List<ToDo> todos)
-	{
-		for (var i = 0; i < todos.Count; i++)
-			RenderToDo(todos[i], i);
-	}
-
-	private void RenderToDo(ToDo todo, int position)
-	{
-		var y = 60 + 50 * position;
-		_canvas.DrawRect(0, y, ScreenWidth, 50, new SKPaint { Color = SKColors.White });
-		var rs = new RichString().FontFamily("Quicksand").Alignment(TextAlignment.Left)
-			.Add(todo.Title, fontSize: 32.0f);
-		rs.Paint(_canvas, new SKPoint(20, y));
-		if (todo.Completed)
-			_canvas.DrawLine(20, y + 2 + rs.MeasuredHeight / 2.0f, 20 + rs.MeasuredWidth,
-				y + 2 + rs.MeasuredHeight / 2.0f,
-				new SKPaint
-				{
-					Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4,
-					StrokeCap = SKStrokeCap.Round
-				});
-
-		var args = new ScreenChangedEventArgs
-		{
-			X = 0,
-			Y = y,
-			Width = ScreenWidth,
-			Height = 50
-		};
-
-		OnScreenChanged(args);
-	}
 
 
+	
 	private MemoryStream GetScreen()
-	{
-		using SKBitmap landscapeBitmap = new(ScreenHeight, ScreenWidth, _screen.ColorType, _screen.AlphaType, _screen.ColorSpace);
-		using var landscapeCanvas = new SKCanvas(landscapeBitmap);
-		landscapeCanvas.Translate(0, ScreenWidth);
-		landscapeCanvas.RotateDegrees(270);
-		landscapeCanvas.DrawBitmap(_screen, 0, 0);
-
-
-		var stream = new MemoryStream();
-		landscapeBitmap.Encode(stream, SKEncodedImageFormat.Jpeg, 100);
-		stream.Position = 0;
-		return stream;
-	}
-
-	private MemoryStream GetDebugScreen()
 	{
 		var stream = new MemoryStream();
 		_screen.Encode(stream, SKEncodedImageFormat.Jpeg, 100);
@@ -146,25 +66,49 @@ public class RenderService : IRenderService, IDisposable
 	/// </summary>
 	private void RenderInitialScreen()
 	{
-		using var canvas = new SKCanvas(_screen);
-		canvas.Clear(SKColors.White);
-
-
-		var rs = new RichString()
-			.Alignment(TextAlignment.Center)
-			.FontFamily("Quicksand")
-			.MarginBottom(40)
-			.Add("Hey there", fontSize: 48.0f)
-			.Paragraph()
-			.MarginBottom(20)
-			.Add("To connect, enter this IP in the App", fontSize: 24.0f)
-			.Paragraph()
-			.Add(GetLocalIPAddress(), fontSize: 48.0f, underline: UnderlineStyle.Solid);
-
-		rs.Paint(canvas, new SKPoint((ScreenWidth - rs.MeasuredWidth) / 2.0f, 100));
+		_canvas.Clear(SKColors.White);
+		
+		RenderText("Hey there", ScreenWidth / 2.0f, 40, 48.0f);
+		RenderText("To connect, enter this IP in the App", ScreenWidth / 2.0f, 70,24.0f);
+		RenderText(GetLocalIpAddress(), ScreenWidth / 2.0f, 150,48.0f);
+		
+		var args = new ScreenChangedEventArgs
+		{
+			X = 0,
+			Y = 0,
+			Width = ScreenWidth,
+			Height = ScreenHeight
+		};
+		OnScreenChanged(args);
+		
 	}
 
-	private string GetLocalIPAddress()
+	private void RenderText(string text, float x, float y, float fontSize, SKTextAlign textAlign = SKTextAlign.Center,
+		bool striked = false)
+	{
+		using var paint = new SKPaint
+		{
+			Color = SKColors.Black,
+			IsAntialias = true,
+			TextSize = fontSize,
+			TextAlign = textAlign,
+		};
+		
+		_canvas.DrawText(text, x,y,paint);
+		if (!striked) return;
+		var textBounds = new SKRect();
+		var textWidth = paint.MeasureText(text, ref textBounds);
+		_canvas.DrawLine(20, y - textBounds.Size.Height / 2.0f, 20 + textWidth,
+			y - textBounds.Size.Height / 2.0f,
+			new SKPaint
+			{
+				Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.StrokeAndFill, StrokeWidth = 4,
+				StrokeCap = SKStrokeCap.Round
+			});
+
+	}
+
+	private string GetLocalIpAddress()
 	{
 		var host = Dns.GetHostEntry(Dns.GetHostName());
 		foreach (var ip in host.AddressList)
