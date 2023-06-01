@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="eXoCooLd.Waveshare.EPaperDisplay" Version="1.0.4" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017" />
         <PackageReference Include="SkiaSharp" Version="2.88.0" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
