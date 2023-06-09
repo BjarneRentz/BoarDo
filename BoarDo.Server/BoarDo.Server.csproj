@@ -4,11 +4,17 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>49b25687-298f-482b-bb33-5c6d73160fe5</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="eXoCooLd.Waveshare.EPaperDisplay" Version="1.0.4" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
         <PackageReference Include="SkiaSharp" Version="2.88.0" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -18,10 +24,22 @@
         <None Update="Fonts\Quicksand-Regular.ttf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Remove="Models\**" />
+        <None Update="boardo.db">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\" />
+      <Compile Remove="Models\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Models\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Models\**" />
     </ItemGroup>
 
 </Project>

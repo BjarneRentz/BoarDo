@@ -1,8 +1,17 @@
+using BoarDo.Server.Configs;
+using BoarDo.Server.Database;
+using BoarDo.Server.Repos;
 using BoarDo.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.Configure<GoogleClientConfig>(builder.Configuration.GetSection(GoogleClientConfig.POSITION));
+builder.Services.AddDbContext<BoarDoContext>();
+
+builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
