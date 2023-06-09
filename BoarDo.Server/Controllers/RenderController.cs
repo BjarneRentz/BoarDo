@@ -7,25 +7,25 @@ namespace BoarDo.Server.Controllers;
 [ApiController]
 public class RenderController : Controller
 {
-	private readonly IRenderService _renderService;
+    private readonly IRenderService _renderService;
 
-	public RenderController(IRenderService renderService)
-	{
-		_renderService = renderService ?? throw new ArgumentNullException(nameof(renderService));
-	}
+    public RenderController(IRenderService renderService)
+    {
+        _renderService = renderService ?? throw new ArgumentNullException(nameof(renderService));
+    }
 
-	[HttpGet("Screen")]
-	public ActionResult GetCurrentScreen()
-	{
-		return File(_renderService.CurrentScreen, "image/jpeg");
-	}
+    [HttpGet("Screen")]
+    public ActionResult GetCurrentScreen()
+    {
+        return File(_renderService.CurrentScreen, "image/jpeg");
+    }
 
-	
-	[HttpPost("RenderText/${name}")]
-	public ActionResult RenderName(string name)
-	{
-		_renderService.RenderHeader(name);
 
-		return Ok();
-	}
+    [HttpPost("RenderText/${name}")]
+    public ActionResult RenderName(string name)
+    {
+        _renderService.RenderHeader(name);
+
+        return Ok();
+    }
 }
