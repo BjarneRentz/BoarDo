@@ -16,7 +16,7 @@ public class AuthClientRepo : IAuthClientsRepo
 		_dbContext = dbContext;
 	}
 
-	public async Task AddGooleClient(string accessToken, string refreshToken)
+	public async Task AddGoogleClientAsync(string accessToken, string refreshToken)
 	{
 		var newClient = new OAuthClient
 		{
@@ -28,7 +28,7 @@ public class AuthClientRepo : IAuthClientsRepo
 		await _dbContext.SaveChangesAsync();
 	}
 
-	public Task<List<OAuthClient>> GetClients()
+	public Task<List<OAuthClient>> GetClientsAsync()
 	{
 		return _dbContext.OAuthClients.ToListAsync();
 	}

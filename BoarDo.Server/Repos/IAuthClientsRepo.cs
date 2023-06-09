@@ -4,7 +4,7 @@ namespace BoarDo.Server.Repos;
 
 public interface IAuthClientsRepo
 {
-	public Task AddGooleClient(string accessToken, string refreshToken);
+	public Task AddGoogleClientAsync(string accessToken, string refreshToken);
 
-	public Task<List<OAuthClient>> GetClients();
+	public Task<List<OAuthClient>> GetClientsAsync();
 }

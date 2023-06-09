@@ -35,7 +35,7 @@ public class AuthController : Controller
 	[HttpGet]
 	public async Task<ActionResult<List<string>>> GetConnectedClients()
 	{
-		return (await _authClientsRepo.GetClients()).Select(c => c.Id).ToList();
+		return (await _authClientsRepo.GetClientsAsync()).Select(c => c.Id).ToList();
 	}
 	
 		
@@ -53,7 +53,7 @@ public class AuthController : Controller
 		var token = await _googleFlow.ExchangeCodeForTokenAsync(_googleClientConfig.ClientId, code,
 			"https://localhost:7117/auth/callback/google", CancellationToken.None);
 
-		await _authClientsRepo.AddGooleClient(token.AccessToken, token.RefreshToken);
+		await _authClientsRepo.AddGoogleClientAsync(token.AccessToken, token.RefreshToken);
 		
 		return Ok();
 	}
