@@ -13,12 +13,14 @@ builder.Services.AddDbContext<BoarDoContext>();
 builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
 
 
+builder.Services.AddSingleton<GoogleCalendarService>();
+builder.Services.AddSingleton<IRenderService, RenderService>();
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<GoogleCalendarService>();
-builder.Services.AddSingleton<IRenderService, RenderService>();
 
 //builder.Services.AddHostedService<EInkDisplay>();
 var app = builder.Build();
@@ -26,8 +28,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
