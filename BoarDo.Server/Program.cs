@@ -13,7 +13,7 @@ builder.Services.AddDbContext<BoarDoContext>();
 builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
 
 
-builder.Services.AddSingleton<GoogleCalendarService>();
+builder.Services.AddScoped<GoogleCalendarService>();
 builder.Services.AddSingleton<IRenderService, RenderService>();
 
 
