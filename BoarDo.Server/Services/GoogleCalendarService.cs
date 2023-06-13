@@ -11,12 +11,15 @@ public class GoogleCalendarService
     private readonly IAuthClientsRepo _authClientsRepo;
 
     private readonly ILogger<GoogleCalendarService> _logger;
+    private readonly IRenderService _renderService;
     private GoogleCredential? _googleCredential;
 
 
-    public GoogleCalendarService(IAuthClientsRepo authClientsRepo, ILogger<GoogleCalendarService> logger)
+    public GoogleCalendarService(IAuthClientsRepo authClientsRepo, IRenderService renderService,
+        ILogger<GoogleCalendarService> logger)
     {
         _authClientsRepo = authClientsRepo;
+        _renderService = renderService;
         _logger = logger;
     }
 
@@ -31,13 +34,16 @@ public class GoogleCalendarService
 
         var request = calendarApi.Events.List("primary");
         request.TimeMin = DateTime.Today;
-        request.TimeMax = DateTime.Today + TimeSpan.FromDays(7);
+        request.TimeMax = DateTime.Today + TimeSpan.FromDays(3);
         request.SingleEvents = true;
         request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
         _logger.LogDebug("Requesting events");
 
-        return await request.ExecuteAsync();
+        var events = await request.ExecuteAsync();
+        _renderService.RenderEvents(events.Items.ToList());
+
+        return events;
     }
 
     private async Task<GoogleCredential> CreateGoogleCredential()
