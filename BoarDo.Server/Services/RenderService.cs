@@ -19,14 +19,13 @@ public sealed class RenderService : IRenderService, IDisposable
     private readonly SKCanvas _canvas;
     private readonly SKBitmap _screen;
     
-    private readonly SKPaint _eventPaint = new()
+    private readonly SKPaint _paint = new()
     {
         Color = SKColors.Black,
-        IsAntialias = true,
+        IsAntialias = false,
         TextSize = 16,
         TextAlign = SKTextAlign.Left,
         TextEncoding = SKTextEncoding.Utf8,
-        Typeface = SKTypeface.FromFile("Fonts/Quicksand-Regular.ttf")
     };
 
     private bool _firstChangedRendered;
@@ -43,6 +42,7 @@ public sealed class RenderService : IRenderService, IDisposable
     {
         _screen.Dispose();
         _canvas.Dispose();
+        _paint.Dispose();
     }
 
     public event EventHandler<ScreenChangedEventArgs>? ScreenChanged;
@@ -152,12 +152,12 @@ public sealed class RenderService : IRenderService, IDisposable
         
         while (text.Length != 0)
         {
-            var drawableLength = _eventPaint.BreakText(text, TextWidthPerDay);
+            var drawableLength = _paint.BreakText(text, TextWidthPerDay);
             if (drawableLength > text.Length)
             {
                 drawableLength = text.Length;
             }
-            _canvas.DrawText(text.Substring(0,Convert.ToInt32(drawableLength)), x, y + height, _eventPaint);
+            _canvas.DrawText(text.Substring(0,Convert.ToInt32(drawableLength)), x, y + height, _paint);
             text = text[Convert.ToInt32(drawableLength)..];
             height += 20;
         }
@@ -231,18 +231,11 @@ public sealed class RenderService : IRenderService, IDisposable
     private void RenderText(string text, float x, float y, float fontSize, SKTextAlign textAlign = SKTextAlign.Center,
         bool underlined = false)
     {
-        using var paint = new SKPaint
-        {
-            Color = SKColors.Black,
-            IsAntialias = true,
-            TextSize = fontSize,
-            TextAlign = textAlign
-        };
 
-        _canvas.DrawText(text, x, y, paint);
+        _canvas.DrawText(text, x, y, _paint);
         if (!underlined) return;
         var textBounds = new SKRect();
-        var textWidth = paint.MeasureText(text, ref textBounds);
+        var textWidth = _paint.MeasureText(text, ref textBounds);
         _canvas.DrawLine(x, y + textBounds.Size.Height, x + textWidth,
             y + textBounds.Size.Height,
             new SKPaint
