@@ -1,4 +1,5 @@
-﻿using BoarDo.Server.Configs;
+﻿using System.Net.Mime;
+using BoarDo.Server.Configs;
 using BoarDo.Server.Repos;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
@@ -9,6 +10,7 @@ namespace BoarDo.Server.Controllers;
 
 [Route("[controller]")]
 [ApiController]
+[Produces(MediaTypeNames.Application.Json)]
 public class AuthController : Controller
 {
     private readonly IAuthClientsRepo _authClientsRepo;
@@ -31,13 +33,21 @@ public class AuthController : Controller
         });
     }
 
+    /// <summary>
+    /// Gets all clients and their state (connected or not).
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<List<string>>> GetConnectedClients()
+    public async Task<ActionResult<Dictionary<string, bool>>> GetClients()
     {
-        return (await _authClientsRepo.GetClientsAsync()).Select(c => c.Id).ToList();
+        return (await _authClientsRepo.GetClientsAsync());
     }
 
 
+    /// <summary>
+    /// Entry point to start an server side google login.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("Connect/Google")]
     public ActionResult ConnectGoogle()
     {
@@ -45,6 +55,11 @@ public class AuthController : Controller
         return Redirect(request.Build().ToString());
     }
 
+    /// <summary>
+    /// Callback route for google login. Should not be called manually.
+    /// </summary>
+    /// <param name="code"></param>
+    /// <returns></returns>
     [HttpGet("Callback/Google")]
     public async Task<ActionResult> AuthCallback([FromQuery] string code)
     {
