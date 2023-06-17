@@ -1,31 +1,30 @@
-﻿using BoarDo.Server.Services;
+﻿using System.Net.Mime;
+using BoarDo.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoarDo.Server.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class RenderController : Controller
+[Produces(MediaTypeNames.Application.Json)]
+
+public class ScreenController : Controller
 {
     private readonly IRenderService _renderService;
 
-    public RenderController(IRenderService renderService)
+    public ScreenController(IRenderService renderService)
     {
         _renderService = renderService ?? throw new ArgumentNullException(nameof(renderService));
     }
 
-    [HttpGet("Screen")]
+    /// <summary>
+    /// Returns the currently rendered screen.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
     public ActionResult GetCurrentScreen()
     {
         return File(_renderService.CurrentScreen, "image/jpeg");
     }
-
-
-    [HttpPost("RenderText/${name}")]
-    public ActionResult RenderName(string name)
-    {
-        _renderService.RenderHeader(name);
-
-        return Ok();
-    }
+    
 }

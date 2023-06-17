@@ -7,6 +7,9 @@ namespace BoarDo.Server.Repos;
 public class AuthClientRepo : IAuthClientsRepo
 {
     private const string GoogleClientKey = "Google";
+    private const string TickTickClientKey = "TickTick";
+
+    private readonly List<string> SupportedAuthProviders = new List<string>() { GoogleClientKey, TickTickClientKey }; 
 
     private readonly BoarDoContext _dbContext;
 
@@ -35,8 +38,15 @@ public class AuthClientRepo : IAuthClientsRepo
         return await _dbContext.OAuthClients.FindAsync(GoogleClientKey);
     }
 
-    public Task<List<OAuthClient>> GetClientsAsync()
+    public async Task<Dictionary<string, bool>> GetClientsAsync()
     {
-        return _dbContext.OAuthClients.ToListAsync();
+        var result = SupportedAuthProviders.ToDictionary(key => key, value => false);
+        
+        var configuredClients = await _dbContext.OAuthClients.ToListAsync();
+        
+        configuredClients.ForEach(c => result[c.Id] = true);
+
+        return result;
+
     }
 }
