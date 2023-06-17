@@ -3,6 +3,7 @@ using BoarDo.Server.Database;
 using BoarDo.Server.Jobs;
 using BoarDo.Server.Repos;
 using BoarDo.Server.Services;
+using Microsoft.EntityFrameworkCore;
 using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,11 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddHostedService<EInkDisplay>();
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<BoarDoContext>();
+dbContext.Database.Migrate();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
