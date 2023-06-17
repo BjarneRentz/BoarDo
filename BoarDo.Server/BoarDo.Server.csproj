@@ -8,38 +8,43 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="eXoCooLd.Waveshare.EPaperDisplay" Version="1.0.4"/>
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017"/>
+        <PackageReference Include="eXoCooLd.Waveshare.EPaperDisplay" Version="1.0.4" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5"/>
-        <PackageReference Include="SkiaSharp" Version="2.88.0"/>
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+        <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
+        <PackageReference Include="SkiaSharp" Version="2.88.0" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
         <None Update="Fonts\Quicksand-Regular.ttf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Remove="Models\**"/>
+        <None Remove="Models\**" />
         <None Update="boardo.db">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
+        <None Remove="Exceptions\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Models\**"/>
+        <Compile Remove="Models\**" />
+        <Compile Remove="Exceptions\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Remove="Models\**"/>
+        <EmbeddedResource Remove="Models\**" />
+        <EmbeddedResource Remove="Exceptions\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="Models\**"/>
+        <Content Remove="Models\**" />
+        <Content Remove="Exceptions\**" />
     </ItemGroup>
 
 </Project>

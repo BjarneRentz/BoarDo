@@ -20,4 +20,12 @@ public class CalendarController : Controller
     {
         return Ok(await _calendarService.GetEvents());
     }
+
+    [HttpPost("Sync/{enable:bool}")]
+    public async Task<ActionResult> ToggleAutoSync(bool enable)
+    {
+        await _calendarService.ToggleSync(enable);
+
+        return Ok();
+    }
 }
