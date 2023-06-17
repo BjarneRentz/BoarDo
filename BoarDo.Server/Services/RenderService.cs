@@ -232,10 +232,19 @@ public sealed class RenderService : IRenderService, IDisposable
         bool underlined = false)
     {
 
-        _canvas.DrawText(text, x, y, _paint);
+        using var paint = new SKPaint
+        {
+            Color = SKColors.Black,
+            IsAntialias = false,
+            TextSize = fontSize,
+            TextAlign = textAlign
+        };
+        
+        
+        _canvas.DrawText(text, x, y, paint);
         if (!underlined) return;
         var textBounds = new SKRect();
-        var textWidth = _paint.MeasureText(text, ref textBounds);
+        var textWidth = paint.MeasureText(text, ref textBounds);
         _canvas.DrawLine(x, y + textBounds.Size.Height, x + textWidth,
             y + textBounds.Size.Height,
             new SKPaint
