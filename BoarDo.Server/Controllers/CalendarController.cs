@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using BoarDo.Server.Dtos;
 using BoarDo.Server.Services;
 using Google.Apis.Calendar.v3.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -39,5 +40,11 @@ public class CalendarController : Controller
         await _calendarService.ToggleSync(enable);
 
         return Ok();
+    }
+
+    [HttpGet("SyncState")]
+    public async Task<ActionResult<SyncStateResult>> GetSyncState()
+    {
+        return Ok(await _calendarService.GetSyncStateAsync());
     }
 }

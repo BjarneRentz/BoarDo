@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { authApi } from '$lib/api-client/clients';
+	import { authApi, calendarApi } from '$lib/api-client/clients';
 
 	const getProviders = async () => {
 		return await authApi.apiAuthGet();
@@ -13,7 +13,14 @@
 		}
 	};
 
+	const toggleCalendarSync = async (enable: boolean) => {
+		await calendarApi.apiCalendarSyncEnablePost({ enable });
+		getCalendarSyncState = calendarApi.apiCalendarSyncStateGet();
+	};
+
 	let promise = getProviders();
+
+	let getCalendarSyncState = calendarApi.apiCalendarSyncStateGet();
 </script>
 
 <div class="flex flex-col gap-y-5">
@@ -42,9 +49,21 @@
 		<p class="text-xl font-bold">Sync</p>
 
 		<div class="grid grid-cols-2 gap-8">
-			<p class="text-lg">Kalender</p>
+			{#await getCalendarSyncState}
+				<progress class="progress progress-primary col-span-2" />
+			{:then result}
+				<p class="text-lg">Kalender</p>
 
-			<button class="btn btn-primary">Aktivieren</button>
+				{#if result.syncEnabled}
+					<button on:click={() => toggleCalendarSync(false)} class="btn btn-error"
+						>Deaktivieren</button
+					>
+				{:else}
+					<button on:click={() => toggleCalendarSync(true)} class="btn btn-primary"
+						>Aktivieren</button
+					>
+				{/if}
+			{/await}
 		</div>
 	</div>
 </div>

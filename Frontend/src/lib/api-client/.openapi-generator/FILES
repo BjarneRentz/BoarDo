@@ -3,6 +3,7 @@ apis/CalendarApi.ts
 apis/ScreenApi.ts
 apis/index.ts
 index.ts
+models/SyncStateResult.ts
 models/UrlResult.ts
 models/index.ts
 runtime.ts

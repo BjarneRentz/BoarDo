@@ -1,4 +1,5 @@
 ﻿using BoarDo.Server.Configs;
+using BoarDo.Server.Dtos;
 using BoarDo.Server.Jobs;
 using BoarDo.Server.Repos;
 using Google.Apis.Auth.OAuth2;
@@ -97,5 +98,13 @@ public class GoogleCalendarService
             _logger.LogInformation("Disabling Calendar Sync");
             await scheduler.DeleteJob(CalenderJob.Key);
         }
+    }
+
+    public async Task<SyncStateResult> GetSyncStateAsync()
+    {
+        var scheduler = await _schedulerFactory.GetScheduler();
+        var detail = await scheduler.GetJobDetail(CalenderJob.Key);
+
+        return new SyncStateResult { SyncEnabled = detail != null };
     }
 }

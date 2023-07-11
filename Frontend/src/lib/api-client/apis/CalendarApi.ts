@@ -14,6 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  SyncStateResult,
+} from '../models';
+import {
+    SyncStateResultFromJSON,
+    SyncStateResultToJSON,
+} from '../models';
 
 export interface ApiCalendarSyncEnablePostRequest {
     enable: boolean;
@@ -73,6 +80,30 @@ export class CalendarApi extends runtime.BaseAPI {
      */
     async apiCalendarSyncEnablePost(requestParameters: ApiCalendarSyncEnablePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.apiCalendarSyncEnablePostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async apiCalendarSyncStateGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SyncStateResult>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/Calendar/SyncState`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SyncStateResultFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiCalendarSyncStateGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SyncStateResult> {
+        const response = await this.apiCalendarSyncStateGetRaw(initOverrides);
+        return await response.value();
     }
 
 }
