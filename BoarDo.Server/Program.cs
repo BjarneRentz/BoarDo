@@ -20,7 +20,14 @@ builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
 builder.Services.AddScoped<GoogleCalendarService>();
 builder.Services.AddSingleton<IRenderService, RenderService>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+    });
+});
 
 
 builder.Services.AddQuartz(q =>
@@ -50,6 +57,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

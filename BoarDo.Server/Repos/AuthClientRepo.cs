@@ -9,7 +9,7 @@ public class AuthClientRepo : IAuthClientsRepo
     private const string GoogleClientKey = "Google";
     private const string TickTickClientKey = "TickTick";
 
-    private readonly List<string> SupportedAuthProviders = new List<string>() { GoogleClientKey, TickTickClientKey }; 
+    private readonly List<string> _supportedAuthProviders = new() { GoogleClientKey, TickTickClientKey }; 
 
     private readonly BoarDoContext _dbContext;
 
@@ -18,10 +18,13 @@ public class AuthClientRepo : IAuthClientsRepo
         _dbContext = dbContext;
     }
 
-    public async Task AddGoogleClientAsync(string accessToken, string refreshToken, string clientId,
+    public async Task AddOrUpdateGoogleClientAsync(string accessToken, string refreshToken, string clientId,
         string clientSecret)
     {
-        var newClient = new OAuthClient
+
+        var clientExists = await _dbContext.OAuthClients.AnyAsync(c => c.Id ==GoogleClientKey);
+
+        var client = new OAuthClient
         {
             Id = GoogleClientKey,
             AccessToken = accessToken,
@@ -29,9 +32,19 @@ public class AuthClientRepo : IAuthClientsRepo
             ClientSecret = clientSecret,
             ClientId = clientId
         };
-        await _dbContext.OAuthClients.AddAsync(newClient);
+
+        if (clientExists)
+        {
+            _dbContext.OAuthClients.Update(client);
+        }
+        else
+        {
+            await _dbContext.OAuthClients.AddAsync(client);
+        }
+
         await _dbContext.SaveChangesAsync();
     }
+    
 
     public async Task<OAuthClient?> GetGoogleAccessTokenAsync()
     {
@@ -40,7 +53,7 @@ public class AuthClientRepo : IAuthClientsRepo
 
     public async Task<Dictionary<string, bool>> GetClientsAsync()
     {
-        var result = SupportedAuthProviders.ToDictionary(key => key, value => false);
+        var result = _supportedAuthProviders.ToDictionary(key => key, value => false);
         
         var configuredClients = await _dbContext.OAuthClients.ToListAsync();
         

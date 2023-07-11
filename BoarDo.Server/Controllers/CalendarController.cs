@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BoarDo.Server.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
 
@@ -23,9 +23,9 @@ public class CalendarController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<List<Events>>> GetEvents()
+    public async Task<ActionResult<List<string>>> GetEvents()
     {
-        return Ok(await _calendarService.GetEvents());
+        return Ok((await _calendarService.GetEvents()).Items.Select(e => e.Summary));
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using BoarDo.Server.Configs;
+using BoarDo.Server.Dtos;
 using BoarDo.Server.Repos;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace BoarDo.Server.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
 public class AuthController : Controller
@@ -16,6 +17,7 @@ public class AuthController : Controller
     private readonly IAuthClientsRepo _authClientsRepo;
     private readonly GoogleClientConfig _googleClientConfig;
     private readonly GoogleAuthorizationCodeFlow _googleFlow;
+    private const string RedirectUri = "https://localhost:7117/api/auth/callback/google";
 
     public AuthController(IOptions<GoogleClientConfig> googleClient, IAuthClientsRepo authClientsRepo)
     {
@@ -49,10 +51,10 @@ public class AuthController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet("Connect/Google")]
-    public ActionResult ConnectGoogle()
+    public ActionResult<UrlResult> ConnectGoogle()
     {
-        var request = _googleFlow.CreateAuthorizationCodeRequest("https://localhost:7117/auth/callback/google");
-        return Redirect(request.Build().ToString());
+        var request = _googleFlow.CreateAuthorizationCodeRequest(RedirectUri);
+        return Ok(new UrlResult{Url = request.Build().ToString()});
     }
 
     /// <summary>
@@ -64,11 +66,11 @@ public class AuthController : Controller
     public async Task<ActionResult> AuthCallback([FromQuery] string code)
     {
         var token = await _googleFlow.ExchangeCodeForTokenAsync(_googleClientConfig.ClientId, code,
-            "https://localhost:7117/auth/callback/google", CancellationToken.None);
+            RedirectUri, CancellationToken.None);
 
-        await _authClientsRepo.AddGoogleClientAsync(token.AccessToken, token.RefreshToken, _googleClientConfig.ClientId,
+        await _authClientsRepo.AddOrUpdateGoogleClientAsync(token.AccessToken, token.RefreshToken, _googleClientConfig.ClientId,
             _googleClientConfig.ClientSecret);
 
-        return Ok();
+        return Redirect("http://localhost:5173/settings");
     }
 }

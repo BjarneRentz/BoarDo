@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BoarDo.Server.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
 
