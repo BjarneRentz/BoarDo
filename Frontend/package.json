@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@cocreators-ee/apity": "^0.0.4",
 		"@openapitools/openapi-generator-cli": "^2.6.0",
 		"daisyui": "^2.52.0"
 	}

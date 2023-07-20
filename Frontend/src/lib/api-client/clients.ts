@@ -1,10 +1,18 @@
-import { AuthApi, CalendarApi } from './apis';
-import { Configuration } from './runtime';
+import { Apity } from '@cocreators-ee/apity';
+import type { paths } from '$lib/api-client/boardo';
 
-const config = new Configuration({ basePath: '' });
+const apity = Apity.for<paths>();
+apity.configure({
+	baseUrl: 'http://localhost:5117'
+});
 
-const authApi = new AuthApi(config);
+export const getAuthClients = apity.path('/api/Auth').method('get').create();
 
-const calendarApi = new CalendarApi(config);
+export const getConnectGoogleUrl = apity.path('/api/Auth/Connect/Google').method('get').create();
 
-export { authApi, calendarApi };
+export const getCalendarSyncState = apity.path('/api/Calendar/SyncState').method('get').create();
+
+export const postToogleCalendarSync = apity
+	.path('/api/Calendar/Sync/{enable}')
+	.method('post')
+	.create();
