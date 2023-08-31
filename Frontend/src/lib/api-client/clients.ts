@@ -3,7 +3,7 @@ import type { paths } from '$lib/api-client/boardo';
 
 const apity = Apity.for<paths>();
 apity.configure({
-	baseUrl: 'http://localhost:5117'
+	baseUrl: 'https://localhost:7117'
 });
 
 export const getAuthClients = apity.path('/api/Auth').method('get').create();
