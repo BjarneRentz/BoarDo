@@ -8,5 +8,7 @@ public interface IAuthClientsRepo
 
     public Task<OAuthClient?> GetGoogleAccessTokenAsync();
 
-    public Task<Dictionary<string, bool>> GetClientsAsync();
+    public Task<Dictionary<OAuthClientProvider, bool>> GetClientsAsync();
+
+    public Task<bool> DeleteClientAsync(OAuthClientProvider provider);
 }

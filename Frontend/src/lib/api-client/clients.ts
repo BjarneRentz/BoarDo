@@ -8,7 +8,12 @@ apity.configure({
 
 export const getAuthClients = apity.path('/api/Auth').method('get').create();
 
-export const getConnectGoogleUrl = apity.path('/api/Auth/Connect/Google').method('get').create();
+export const getConnectProviderUrl = apity
+	.path('/api/Auth/Connect/{provider}')
+	.method('get')
+	.create();
+
+export const deleteProvider = apity.path('/api/Auth/{provider}').method('delete').create();
 
 export const getCalendarSyncState = apity.path('/api/Calendar/SyncState').method('get').create();
 

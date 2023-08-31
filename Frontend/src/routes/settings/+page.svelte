@@ -1,20 +1,36 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import {
+		deleteProvider,
 		getAuthClients,
 		getCalendarSyncState,
-		getConnectGoogleUrl,
+		getConnectProviderUrl,
 		postToogleCalendarSync
 	} from '$lib/api-client/clients';
+	import ConfirmDialog from '$lib/components/confirm-dialog.svelte';
 
 	const getProvidersRequest = getAuthClients({});
-	const getProvidersReady = getProvidersRequest.ready;
+	let getProvidersReady = getProvidersRequest.ready;
+
+	let confirmDialogVisible = false;
+	let dialogOkCallback: Function;
+	let dialogProvider = '';
+
+	const removeProvider = async (provider: string) => {
+		dialogProvider = provider;
+		dialogOkCallback = async () => {
+			await deleteProvider({ provider: provider as any }).result;
+			confirmDialogVisible = false;
+			getProvidersReady = getAuthClients({}).ready;
+		};
+		confirmDialogVisible = true;
+	};
 
 	let getCalendarSyncStateReady = getCalendarSyncState({}).ready;
 
 	const connectProvider = async (name: string) => {
 		if (name === 'Google' && browser) {
-			const result = await getConnectGoogleUrl({}).result;
+			const result = await getConnectProviderUrl({ provider: name }).result;
 			window.location.href = result.data.url;
 		}
 	};
@@ -39,7 +55,7 @@
 					{#each Object.entries(result.data) as [key, value]}
 						<p class="text-lg">{key}</p>
 						{#if value}
-							<button class="btn btn-error">Löschen</button>
+							<button class="btn btn-error" on:click={() => removeProvider(key)}>Löschen</button>
 						{:else}
 							<button on:click={() => connectProvider(key)} class="btn btn-primary"
 								>Verbinden</button
@@ -77,3 +93,9 @@
 		</div>
 	</div>
 </div>
+
+<ConfirmDialog
+	confirmVisible={confirmDialogVisible}
+	title={`Do you want to remove the connection to ${dialogProvider}? `}
+	okCallback={dialogOkCallback}
+/>

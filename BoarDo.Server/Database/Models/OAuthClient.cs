@@ -2,7 +2,7 @@
 
 public class OAuthClient
 {
-    public string Id { get; set; }
+    public OAuthClientProvider Id { get; set; }
 
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }

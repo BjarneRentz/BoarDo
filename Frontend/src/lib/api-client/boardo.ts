@@ -19,8 +19,25 @@ export interface paths {
       };
     };
   };
-  "/api/Auth/Connect/Google": {
+  "/api/Auth/Supported": {
     get: {
+      responses: {
+        /** @description Success */
+        200: {
+          content: {
+            "application/json": (components["schemas"]["OAuthClientProvider"])[];
+          };
+        };
+      };
+    };
+  };
+  "/api/Auth/Connect/{provider}": {
+    get: {
+      parameters: {
+        path: {
+          provider: components["schemas"]["OAuthClientProvider"];
+        };
+      };
       responses: {
         /** @description Success */
         200: {
@@ -36,6 +53,19 @@ export interface paths {
       parameters: {
         query?: {
           code?: string;
+        };
+      };
+      responses: {
+        /** @description Success */
+        200: never;
+      };
+    };
+  };
+  "/api/Auth/{provider}": {
+    delete: {
+      parameters: {
+        path: {
+          provider: components["schemas"]["OAuthClientProvider"];
         };
       };
       responses: {
@@ -95,6 +125,8 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    /** @enum {string} */
+    OAuthClientProvider: "Google" | "TickTick";
     SyncStateResult: {
       syncEnabled?: boolean;
     };

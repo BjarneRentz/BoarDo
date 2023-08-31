@@ -10,7 +10,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"build-api-client": "openapi-generator-cli generate -i http://localhost:5117/swagger/v1/swagger.json -g typescript-fetch -o src/lib/api-client/"
+		"build-api-client": "npx openapi-typescript http://localhost:5117/swagger/v1/swagger.json --output src/lib/api-client/boardo.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -34,7 +34,6 @@
 	"type": "module",
 	"dependencies": {
 		"@cocreators-ee/apity": "^0.0.4",
-		"@openapitools/openapi-generator-cli": "^2.6.0",
 		"daisyui": "^2.52.0"
 	}
 }
