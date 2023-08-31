@@ -1,11 +1,12 @@
 ﻿using System.Net.Mime;
+using BoarDo.Server.Dtos;
 using BoarDo.Server.Services;
 using Google.Apis.Calendar.v3.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoarDo.Server.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
 
@@ -23,9 +24,9 @@ public class CalendarController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<List<Events>>> GetEvents()
+    public async Task<ActionResult<List<string>>> GetEvents()
     {
-        return Ok(await _calendarService.GetEvents());
+        return Ok((await _calendarService.GetEvents()).Items.Select(e => e.Summary));
     }
 
     /// <summary>
@@ -39,5 +40,11 @@ public class CalendarController : Controller
         await _calendarService.ToggleSync(enable);
 
         return Ok();
+    }
+
+    [HttpGet("SyncState")]
+    public async Task<ActionResult<SyncStateResult>> GetSyncState()
+    {
+        return Ok(await _calendarService.GetSyncStateAsync());
     }
 }

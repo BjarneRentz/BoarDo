@@ -20,6 +20,19 @@ builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
 builder.Services.AddScoped<GoogleCalendarService>();
 builder.Services.AddSingleton<IRenderService, RenderService>();
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin();
+            policy.AllowAnyMethod();
+            policy.AllowAnyHeader();
+        });
+    });
+}
+
 
 
 
@@ -49,11 +62,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors();
+
 }
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

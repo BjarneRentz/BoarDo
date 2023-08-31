@@ -4,7 +4,7 @@ namespace BoarDo.Server.Repos;
 
 public interface IAuthClientsRepo
 {
-    public Task AddGoogleClientAsync(string accessToken, string refreshToken, string clientId, string clientSecret);
+    public Task AddOrUpdateGoogleClientAsync(string accessToken, string refreshToken, string clientId, string clientSecret);
 
     public Task<OAuthClient?> GetGoogleAccessTokenAsync();
 
