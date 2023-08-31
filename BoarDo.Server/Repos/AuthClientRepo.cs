@@ -6,10 +6,8 @@ namespace BoarDo.Server.Repos;
 
 public class AuthClientRepo : IAuthClientsRepo
 {
-    private const string GoogleClientKey = "Google";
-    private const string TickTickClientKey = "TickTick";
 
-    private readonly List<string> _supportedAuthProviders = new() { GoogleClientKey, TickTickClientKey }; 
+    private readonly List<OAuthClientProvider> _supportedAuthProviders = new() { OAuthClientProvider.Google, OAuthClientProvider.TickTick }; 
 
     private readonly BoarDoContext _dbContext;
 
@@ -22,11 +20,11 @@ public class AuthClientRepo : IAuthClientsRepo
         string clientSecret)
     {
 
-        var clientExists = await _dbContext.OAuthClients.AnyAsync(c => c.Id ==GoogleClientKey);
+        var clientExists = await _dbContext.OAuthClients.AnyAsync(c => c.Id ==OAuthClientProvider.Google);
 
         var client = new OAuthClient
         {
-            Id = GoogleClientKey,
+            Id = OAuthClientProvider.Google,
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             ClientSecret = clientSecret,
@@ -48,10 +46,10 @@ public class AuthClientRepo : IAuthClientsRepo
 
     public async Task<OAuthClient?> GetGoogleAccessTokenAsync()
     {
-        return await _dbContext.OAuthClients.FindAsync(GoogleClientKey);
+        return await _dbContext.OAuthClients.FindAsync(OAuthClientProvider.Google);
     }
 
-    public async Task<Dictionary<string, bool>> GetClientsAsync()
+    public async Task<Dictionary<OAuthClientProvider, bool>> GetClientsAsync()
     {
         var result = _supportedAuthProviders.ToDictionary(key => key, value => false);
         
@@ -61,5 +59,18 @@ public class AuthClientRepo : IAuthClientsRepo
 
         return result;
 
+    }
+
+    public async Task<bool> DeleteClientAsync(OAuthClientProvider provider)
+    {
+        var client = await _dbContext.OAuthClients.FindAsync(provider);
+        if (client == null)
+            return false;
+
+        _dbContext.OAuthClients.Remove(client);
+
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 }

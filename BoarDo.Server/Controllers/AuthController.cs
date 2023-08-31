@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using BoarDo.Server.Configs;
+using BoarDo.Server.Database.Models;
 using BoarDo.Server.Dtos;
 using BoarDo.Server.Repos;
 using Google.Apis.Auth.OAuth2;
@@ -40,9 +41,15 @@ public class AuthController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<Dictionary<string, bool>>> GetClients()
+    public async Task<ActionResult<Dictionary<OAuthClientProvider, bool>>> GetClients()
     {
         return (await _authClientsRepo.GetClientsAsync());
+    }
+
+    [HttpGet("Supported")]
+    public ActionResult<List<OAuthClientProvider>> GetSupportedClients()
+    {
+        return Ok(new List<OAuthClientProvider> { OAuthClientProvider.Google, OAuthClientProvider.TickTick });
     }
 
 
@@ -50,11 +57,18 @@ public class AuthController : Controller
     /// Entry point to start an server side google login.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("Connect/Google")]
-    public ActionResult<UrlResult> ConnectGoogle()
+    [HttpGet("Connect/{provider}")]
+    public ActionResult<UrlResult> ConnectGoogle(OAuthClientProvider provider)
     {
-        var request = _googleFlow.CreateAuthorizationCodeRequest(RedirectUri);
-        return Ok(new UrlResult{Url = request.Build().ToString()});
+        if (provider == OAuthClientProvider.Google)
+        {
+            var request = _googleFlow.CreateAuthorizationCodeRequest(RedirectUri);
+            return Ok(new UrlResult{Url = request.Build().ToString()});    
+        }
+
+        throw new NotSupportedException();
+
+
     }
 
     /// <summary>
@@ -72,5 +86,13 @@ public class AuthController : Controller
             _googleClientConfig.ClientSecret);
 
         return Redirect("http://localhost:5173/settings");
+    }
+
+    [HttpDelete("{provider}")]
+    public async Task<ActionResult> RemoveClient(OAuthClientProvider provider)
+    {
+        var result = await _authClientsRepo.DeleteClientAsync(provider);
+
+        return result ? Ok() : BadRequest();
     }
 }

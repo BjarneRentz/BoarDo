@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using BoarDo.Server.Configs;
 using BoarDo.Server.Database;
 using BoarDo.Server.Jobs;
@@ -44,7 +45,7 @@ builder.Services.AddQuartz(q =>
 
 builder.Services.AddQuartzHostedService(c => c.WaitForJobsToComplete = true);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -66,8 +67,6 @@ if (app.Environment.IsDevelopment())
 
 }
 
-
-app.UseHttpsRedirection();
 
 app.MapControllers();
 
