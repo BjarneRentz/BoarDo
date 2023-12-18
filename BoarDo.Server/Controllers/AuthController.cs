@@ -18,7 +18,8 @@ public class AuthController : Controller
     private readonly IAuthClientsRepo _authClientsRepo;
     private readonly GoogleClientConfig _googleClientConfig;
     private readonly GoogleAuthorizationCodeFlow _googleFlow;
-    private const string RedirectUri = "https://localhost:7117/api/auth/callback/google";
+    private const string ApplicationUrl = "https://localhost:8080";
+    private const string GoogleCallbackPath = "/api/auth/callback/google";
 
     public AuthController(IOptions<GoogleClientConfig> googleClient, IAuthClientsRepo authClientsRepo)
     {
@@ -62,7 +63,7 @@ public class AuthController : Controller
     {
         if (provider == OAuthClientProvider.Google)
         {
-            var request = _googleFlow.CreateAuthorizationCodeRequest(RedirectUri);
+            var request = _googleFlow.CreateAuthorizationCodeRequest(ApplicationUrl + GoogleCallbackPath);
             return Ok(new UrlResult{Url = request.Build().ToString()});    
         }
 
@@ -80,12 +81,12 @@ public class AuthController : Controller
     public async Task<ActionResult> AuthCallback([FromQuery] string code)
     {
         var token = await _googleFlow.ExchangeCodeForTokenAsync(_googleClientConfig.ClientId, code,
-            RedirectUri, CancellationToken.None);
+            ApplicationUrl + GoogleCallbackPath, CancellationToken.None);
 
         await _authClientsRepo.AddOrUpdateGoogleClientAsync(token.AccessToken, token.RefreshToken, _googleClientConfig.ClientId,
             _googleClientConfig.ClientSecret);
 
-        return Redirect("http://localhost:5173/settings");
+        return Redirect(ApplicationUrl + "/settings");
     }
 
     [HttpDelete("{provider}")]
