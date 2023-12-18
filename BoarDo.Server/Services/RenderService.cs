@@ -237,7 +237,8 @@ public sealed class RenderService : IRenderService, IDisposable
             Color = SKColors.Black,
             IsAntialias = false,
             TextSize = fontSize,
-            TextAlign = textAlign
+            TextAlign = textAlign,
+            Typeface = SKTypeface.FromFile("Fonts/Quicksand-Regular.ttf")
         };
         
         
