@@ -1,9 +1,10 @@
 import { Apity } from '@cocreators-ee/apity';
 import type { paths } from '$lib/api-client/boardo';
+import { PUBLIC_BASE_URL } from '$env/static/public';
 
 const apity = Apity.for<paths>();
 apity.configure({
-	baseUrl: 'https://localhost:7117'
+	baseUrl: PUBLIC_BASE_URL
 });
 
 export const getAuthClients = apity.path('/api/Auth').method('get').create();

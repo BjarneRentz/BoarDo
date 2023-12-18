@@ -1,0 +1,12 @@
+﻿.git
+Frontend/node_modules
+Frontend/build
+Fronted/public
+
+.dockerignore
+.env
+.gitignore
+.vs
+.vscode
+*/bin
+*/obj
