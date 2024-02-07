@@ -11,8 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.Configure<GoogleClientConfig>(builder.Configuration.GetSection(GoogleClientConfig.POSITION));
-builder.Services.Configure<SyncSettings>(builder.Configuration.GetSection(SyncSettings.POSITION));
+builder.Services.Configure<GoogleClientConfig>(builder.Configuration.GetSection(GoogleClientConfig.Position));
+builder.Services.Configure<SyncSettings>(builder.Configuration.GetSection(SyncSettings.Position));
+builder.Services.Configure<UrlConfig>(builder.Configuration.GetSection(UrlConfig.Position));
 builder.Services.AddDbContext<BoarDoContext>();
 
 builder.Services.AddScoped<IAuthClientsRepo, AuthClientRepo>();
@@ -67,8 +68,21 @@ if (app.Environment.IsDevelopment())
 
 }
 
+app.Use((context, next) =>
+{
+    // If we have an Endpoint, then this is a deferred match - just noop.
+    if (context.GetEndpoint() != null)
+    {
+        return next(context);
+    }
+
+    context.Request.Path = new PathString("/");
+    return next(context);
+});
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();

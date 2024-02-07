@@ -2,7 +2,7 @@
 
 public class SyncSettings
 {
-	public const string POSITION = "SyncSettings";
+	public const string Position = "SyncSettings";
 
 	public string Calendar { get; set; }
 }

@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="eXoCooLd.Waveshare.EPaperDisplay" Version="1.0.4" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

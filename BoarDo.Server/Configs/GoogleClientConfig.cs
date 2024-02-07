@@ -2,7 +2,7 @@
 
 public class GoogleClientConfig
 {
-    public const string POSITION = "OAuthClients:Google";
+    public const string Position = "OAuthClients:Google";
 
     public string ClientId { get; set; }
     public string ClientSecret { get; set; }

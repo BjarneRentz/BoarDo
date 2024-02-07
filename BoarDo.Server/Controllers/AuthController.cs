@@ -18,10 +18,10 @@ public class AuthController : Controller
     private readonly IAuthClientsRepo _authClientsRepo;
     private readonly GoogleClientConfig _googleClientConfig;
     private readonly GoogleAuthorizationCodeFlow _googleFlow;
-    private const string ApplicationUrl = "https://localhost:8080";
     private const string GoogleCallbackPath = "/api/auth/callback/google";
+    private readonly UrlConfig _urlConfig;
 
-    public AuthController(IOptions<GoogleClientConfig> googleClient, IAuthClientsRepo authClientsRepo)
+    public AuthController(IOptions<GoogleClientConfig> googleClient, IAuthClientsRepo authClientsRepo, IOptions<UrlConfig> urlConfig)
     {
         _googleClientConfig = googleClient.Value;
         _authClientsRepo = authClientsRepo;
@@ -35,6 +35,8 @@ public class AuthController : Controller
             Prompt = "consent",
             Scopes = new[] { "https://www.googleapis.com/auth/calendar.readonly" }
         });
+        _urlConfig = urlConfig.Value;
+
     }
 
     /// <summary>
@@ -63,7 +65,7 @@ public class AuthController : Controller
     {
         if (provider == OAuthClientProvider.Google)
         {
-            var request = _googleFlow.CreateAuthorizationCodeRequest(ApplicationUrl + GoogleCallbackPath);
+            var request = _googleFlow.CreateAuthorizationCodeRequest(_urlConfig.BackendUrl + GoogleCallbackPath);
             return Ok(new UrlResult{Url = request.Build().ToString()});    
         }
 
@@ -81,12 +83,12 @@ public class AuthController : Controller
     public async Task<ActionResult> AuthCallback([FromQuery] string code)
     {
         var token = await _googleFlow.ExchangeCodeForTokenAsync(_googleClientConfig.ClientId, code,
-            ApplicationUrl + GoogleCallbackPath, CancellationToken.None);
+            _urlConfig.BackendUrl + GoogleCallbackPath, CancellationToken.None);
 
         await _authClientsRepo.AddOrUpdateGoogleClientAsync(token.AccessToken, token.RefreshToken, _googleClientConfig.ClientId,
             _googleClientConfig.ClientSecret);
 
-        return Redirect(ApplicationUrl + "/settings");
+        return Redirect(_urlConfig.FrontendUrl + "/settings");
     }
 
     [HttpDelete("{provider}")]
